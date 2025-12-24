@@ -86,8 +86,8 @@ export async function POST(request: NextRequest) {
                         customerName: userData?.full_name || 'Customer'
                     },
                     orderMeta: {
-                        returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/webinar/${webinar?.slug}/success?order_id={order_id}`,
-                        notifyUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/payment/webhook`
+                        returnUrl: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/webinar/${webinar?.slug}/success?order_id={order_id}`,
+                        notifyUrl: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/payment/webhook`
                     },
                     orderNote: `Webinar Registration - ${item_id}`
                 })
@@ -167,8 +167,8 @@ export async function POST(request: NextRequest) {
                         customerName: userData?.full_name || 'Customer'
                     },
                     orderMeta: {
-                        returnUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/service/${service?.slug}/success?order_id={order_id}`,
-                        notifyUrl: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/payment/webhook`
+                        returnUrl: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/service/${service?.slug}/success?order_id={order_id}`,
+                        notifyUrl: `${process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/payment/webhook`
                     },
                     orderNote: `Service Purchase - ${item_id}`
                 })
