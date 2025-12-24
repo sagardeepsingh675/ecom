@@ -168,7 +168,11 @@ export default function WebinarDetailPage({ params }: { params: Promise<{ slug: 
                                     </div>
                                     <div className="glass-card p-4">
                                         <div className="text-white/50 text-sm mb-1">⏱️ Duration</div>
-                                        <div className="text-white font-semibold">{webinar.duration_minutes} minutes</div>
+                                        <div className="text-white font-semibold">
+                                            {webinar.end_time
+                                                ? `${Math.round((new Date(`2000-01-01T${webinar.end_time}`).getTime() - new Date(`2000-01-01T${webinar.start_time}`).getTime()) / 60000)} minutes`
+                                                : '60 minutes'}
+                                        </div>
                                     </div>
                                     <div className="glass-card p-4">
                                         <div className="text-white/50 text-sm mb-1">📍 Platform</div>
@@ -179,11 +183,11 @@ export default function WebinarDetailPage({ params }: { params: Promise<{ slug: 
                                 </div>
 
                                 {/* What You'll Learn */}
-                                {webinar.what_youll_learn && (webinar.what_youll_learn as string[]).length > 0 && (
+                                {(webinar as any).what_youll_learn && ((webinar as any).what_youll_learn as string[]).length > 0 && (
                                     <div className="mb-8">
                                         <h3 className="text-xl font-semibold text-white mb-4">What You'll Learn</h3>
                                         <ul className="space-y-3">
-                                            {(webinar.what_youll_learn as string[]).map((item, idx) => (
+                                            {((webinar as any).what_youll_learn as string[]).map((item, idx) => (
                                                 <li key={idx} className="flex items-start gap-3 text-white/70">
                                                     <svg className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
