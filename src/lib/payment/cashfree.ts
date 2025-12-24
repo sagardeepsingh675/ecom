@@ -3,7 +3,8 @@ import { Cashfree } from 'cashfree-pg'
 // Get credentials from environment
 const appId = process.env.CASHFREE_APP_ID || ''
 const secretKey = process.env.CASHFREE_SECRET_KEY || ''
-const isProduction = process.env.CASHFREE_ENV === 'production'
+// Handle case-insensitive 'production' value from env
+const isProduction = (process.env.CASHFREE_ENV || '').toLowerCase() === 'production'
 
 // Check if we should run in demo mode
 export const DEMO_MODE = !appId || process.env.CASHFREE_DEMO_MODE === 'true'
@@ -23,11 +24,16 @@ function getCashfreeInstance() {
             // Set configuration on the instance
             cashfreeInstance.XClientId = appId
             cashfreeInstance.XClientSecret = secretKey
-            cashfreeInstance.XEnvironment = isProduction
-                ? 'PRODUCTION' // Use string values as SDK might not have static Enum exposed correctly
-                : 'SANDBOX'
 
-            console.log('Cashfree initialized:', { isProduction, hasInstance: !!cashfreeInstance })
+            // Cashfree Environment Enum: SANDBOX=1, PRODUCTION=2
+            // We use numeric values to avoid import issues or SDK version mismatches
+            cashfreeInstance.XEnvironment = isProduction ? 2 : 1
+
+            console.log('Cashfree initialized:', {
+                isProduction,
+                hasInstance: !!cashfreeInstance,
+                environment: cashfreeInstance.XEnvironment
+            })
         } catch (e) {
             console.error('Failed to initialize Cashfree:', e)
         }
