@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 
@@ -19,14 +19,26 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
-    const supabase = createClient()
+
+    // Memoize the supabase client to prevent recreation
+    const supabase = useMemo(() => createClient(), [])
 
     useEffect(() => {
+        if (!supabase) {
+            setLoading(false)
+            return
+        }
+
         // Get initial session
         const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
-            setUser(session?.user ?? null)
-            setLoading(false)
+            try {
+                const { data: { session } } = await supabase.auth.getSession()
+                setUser(session?.user ?? null)
+            } catch (error) {
+                console.error('Error getting session:', error)
+            } finally {
+                setLoading(false)
+            }
         }
 
         getSession()
@@ -40,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         )
 
         return () => subscription.unsubscribe()
-    }, [supabase.auth])
+    }, [supabase]) // Now supabase is stable due to singleton + useMemo
 
     const signOut = async () => {
         await fetch('/api/auth/logout', { method: 'POST' })
