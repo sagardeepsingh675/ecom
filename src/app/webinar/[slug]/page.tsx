@@ -45,15 +45,16 @@ export default function WebinarDetailPage({ params }: { params: Promise<{ slug: 
                     throw new Error(data.error || 'Registration failed')
                 }
 
-                router.push(`/webinar/${slug}/success?registration_id=${data.registration_id}`)
+                // Use window.location.href to avoid React hydration issues during transition
+                window.location.href = `/webinar/${slug}/success?registration_id=${data.registration_id}`
             } catch (err) {
+                setRegistering(false) // Only stop loading on error, otherwise we are navigating
                 setRegisterError(err instanceof Error ? err.message : 'Something went wrong')
-            } finally {
-                setRegistering(false)
             }
         } else {
             // Paid webinar - redirect to checkout
-            router.push(`/webinar/${slug}/checkout`)
+            // Use window.location.href to prevent 'removeChild' errors if DOM is modified by extensions
+            window.location.href = `/webinar/${slug}/checkout`
         }
     }
 
