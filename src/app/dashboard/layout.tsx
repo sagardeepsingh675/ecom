@@ -43,14 +43,24 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 {/* Logo */}
                 <div className="p-6 border-b border-white/5">
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <span className="text-lg font-bold text-white">
-                            {settings?.site_name || 'WebinarPro'}
-                        </span>
+                        {settings?.logo_url ? (
+                            <img
+                                src={settings.logo_url}
+                                alt={settings?.site_name || 'Logo'}
+                                className="h-10 w-auto object-contain"
+                            />
+                        ) : (
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        )}
+                        {!settings?.logo_url && (
+                            <span className="text-lg font-bold text-white">
+                                {settings?.site_name || 'WebinarPro'}
+                            </span>
+                        )}
                     </Link>
                 </div>
 
@@ -61,8 +71,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                             key={item.name}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive(item.href)
-                                    ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'
-                                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                                ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'
+                                : 'text-white/60 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
