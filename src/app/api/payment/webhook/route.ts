@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { verifyPayment } from '@/lib/payment/cashfree'
 import { sendBookingConfirmation } from '@/lib/email/resend'
 import { formatDate, formatTime } from '@/lib/utils'
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ error: 'Missing order ID' }, { status: 400 })
             }
 
-            const supabase = await createClient()
+            const supabase = await createServiceClient()
 
             // Find the registration or purchase with this order ID
             const { data: registration } = await supabase
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
             const orderId = data?.order?.order_id
 
             if (orderId) {
-                const supabase = await createClient()
+                const supabase = await createServiceClient()
 
                 // Update registration status
                 await supabase

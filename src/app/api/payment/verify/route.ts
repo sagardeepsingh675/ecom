@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { verifyPayment } from '@/lib/payment/cashfree'
 import { sendBookingConfirmation, sendServicePurchaseConfirmation } from '@/lib/email/resend'
 import { formatDate, formatTime } from '@/lib/utils'
@@ -94,7 +94,8 @@ export async function POST(request: NextRequest) {
 
             // Update service purchase
             if (purchase.payment_status !== 'completed') {
-                await supabase
+                const adminSupabase = await createServiceClient()
+                await adminSupabase
                     .from('service_purchases')
                     .update({ payment_status: 'completed' })
                     .eq('id', purchase.id)
@@ -132,7 +133,8 @@ export async function POST(request: NextRequest) {
 
         // Update webinar registration if not already completed
         if (registration.payment_status !== 'completed') {
-            const { error: updateError } = await supabase
+            const adminSupabase = await createServiceClient()
+            const { error: updateError } = await adminSupabase
                 .from('webinar_registrations')
                 .update({ payment_status: 'completed' })
                 .eq('id', registration.id)
@@ -148,7 +150,7 @@ export async function POST(request: NextRequest) {
             // Decrement available slots
             const webinarData = registration.webinars as any
             if (webinarData && webinarData.available_slots > 0) {
-                await supabase
+                await adminSupabase
                     .from('webinars')
                     .update({ available_slots: webinarData.available_slots - 1 })
                     .eq('id', registration.webinar_id)
