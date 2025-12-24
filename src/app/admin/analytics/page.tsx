@@ -169,7 +169,7 @@ export default function AdminAnalytics() {
                                     borderRadius: '8px',
                                 }}
                                 labelStyle={{ color: '#fff' }}
-                                formatter={(value: number) => [formatCurrency(value), '']}
+                                formatter={(value: number | undefined) => [formatCurrency(value ?? 0), '']}
                                 labelFormatter={formatDateLabel}
                             />
                             <Legend />
