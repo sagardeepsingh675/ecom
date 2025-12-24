@@ -33,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .select('slug, updated_at')
         .eq('status', 'published')
 
-    const webinarPages: MetadataRoute.Sitemap = (webinars || []).map((webinar) => ({
+    const webinarPages: MetadataRoute.Sitemap = (webinars || []).map((webinar: any) => ({
         url: `${baseUrl}/webinar/${webinar.slug}`,
         lastModified: new Date(webinar.updated_at),
         changeFrequency: 'weekly',
@@ -46,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .select('slug, updated_at')
         .eq('is_active', true)
 
-    const servicePages: MetadataRoute.Sitemap = (services || []).map((service) => ({
+    const servicePages: MetadataRoute.Sitemap = (services || []).map((service: any) => ({
         url: `${baseUrl}/service/${service.slug}`,
         lastModified: new Date(service.updated_at),
         changeFrequency: 'weekly',
