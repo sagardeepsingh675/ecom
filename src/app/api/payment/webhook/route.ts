@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
                     users (email, full_name),
                     webinars (title, webinar_date, start_time, host_name, slug)
                 `)
-                .eq('transaction_id', orderId)
+                .eq('payment_id', orderId)
                 .single()
 
             if (registration) {
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
             const { data: purchase } = await supabase
                 .from('service_purchases')
                 .select('id, user_id, service_id, amount')
-                .eq('transaction_id', orderId)
+                .eq('payment_id', orderId)
                 .single()
 
             if (purchase) {
@@ -148,12 +148,12 @@ export async function POST(request: NextRequest) {
                 await supabase
                     .from('webinar_registrations')
                     .update({ payment_status: 'failed' })
-                    .eq('transaction_id', orderId)
+                    .eq('payment_id', orderId)
 
                 await supabase
                     .from('service_purchases')
                     .update({ payment_status: 'failed' })
-                    .eq('transaction_id', orderId)
+                    .eq('payment_id', orderId)
 
                 console.log('Payment failed for order:', orderId)
             }
