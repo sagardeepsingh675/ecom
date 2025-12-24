@@ -41,8 +41,8 @@ export async function GET(request: NextRequest) {
             .eq('payment_status', 'completed')
 
         // Calculate totals
-        const totalWebinarRevenue = (registrations || []).reduce((sum, r) => sum + (r.amount_paid || 0), 0)
-        const totalServiceRevenue = (purchases || []).reduce((sum, p) => sum + (p.amount_paid || 0), 0)
+        const totalWebinarRevenue = (registrations || []).reduce((sum: number, r: any) => sum + (r.amount_paid || 0), 0)
+        const totalServiceRevenue = (purchases || []).reduce((sum: number, p: any) => sum + (p.amount_paid || 0), 0)
         const totalRevenue = totalWebinarRevenue + totalServiceRevenue
 
         // Calculate daily revenue for chart
@@ -56,14 +56,14 @@ export async function GET(request: NextRequest) {
             revenueByDay[dateStr] = { webinar: 0, service: 0, date: dateStr }
         }
 
-        (registrations || []).forEach(r => {
+        (registrations || []).forEach((r: any) => {
             const dateStr = new Date(r.registered_at).toISOString().split('T')[0]
             if (revenueByDay[dateStr]) {
                 revenueByDay[dateStr].webinar += r.amount_paid || 0
             }
         });
 
-        (purchases || []).forEach(p => {
+        (purchases || []).forEach((p: any) => {
             const dateStr = new Date(p.purchased_at).toISOString().split('T')[0]
             if (revenueByDay[dateStr]) {
                 revenueByDay[dateStr].service += p.amount_paid || 0
