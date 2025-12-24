@@ -44,13 +44,13 @@ export default function DashboardPage() {
 
                 // Filter for upcoming webinars (future dates only)
                 const today = new Date().toISOString().split('T')[0]
-                const upcomingCount = webinarRegs?.filter(reg => {
+                const upcomingCount = webinarRegs?.filter((reg: any) => {
                     const webinar = reg.webinars as any
                     return webinar && webinar.webinar_date >= today
                 }).length || 0
 
                 // Calculate total spent on webinars
-                const webinarTotal = webinarRegs?.reduce((sum, r) => sum + (r.amount_paid || 0), 0) || 0
+                const webinarTotal = webinarRegs?.reduce((sum: number, r: any) => sum + (r.amount_paid || 0), 0) || 0
 
                 // Fetch service purchases
                 const { data: purchases, error: purchaseError } = await supabase
@@ -63,7 +63,7 @@ export default function DashboardPage() {
                     console.error('Error fetching purchases:', purchaseError)
                 }
 
-                const serviceTotal = purchases?.reduce((sum, p) => sum + (p.amount_paid || 0), 0) || 0
+                const serviceTotal = purchases?.reduce((sum: number, p: any) => sum + (p.amount_paid || 0), 0) || 0
 
                 setStats({
                     upcomingWebinars: upcomingCount,
