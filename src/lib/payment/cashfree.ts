@@ -11,22 +11,22 @@ export const DEMO_MODE = !appId || process.env.CASHFREE_DEMO_MODE === 'true'
 // Cast Cashfree to any to handle SDK type mismatches
 const CashfreeSDK = Cashfree as any
 
-// Cashfree SDK Configuration
-if (appId && secretKey) {
-    CashfreeSDK.XClientId = appId
-    CashfreeSDK.XClientSecret = secretKey
-    CashfreeSDK.XEnvironment = isProduction
-        ? CashfreeSDK.Environment?.PRODUCTION || 'PRODUCTION'
-        : CashfreeSDK.Environment?.SANDBOX || 'SANDBOX'
-}
-
 // Create Cashfree instance
 let cashfreeInstance: any = null
 
 function getCashfreeInstance() {
     if (!cashfreeInstance && appId && secretKey) {
         try {
-            cashfreeInstance = CashfreeSDK
+            // Instantiate Cashfree SDK
+            cashfreeInstance = new CashfreeSDK()
+
+            // Set configuration on the instance
+            cashfreeInstance.XClientId = appId
+            cashfreeInstance.XClientSecret = secretKey
+            cashfreeInstance.XEnvironment = isProduction
+                ? 'PRODUCTION' // Use string values as SDK might not have static Enum exposed correctly
+                : 'SANDBOX'
+
             console.log('Cashfree initialized:', { isProduction, hasInstance: !!cashfreeInstance })
         } catch (e) {
             console.error('Failed to initialize Cashfree:', e)
