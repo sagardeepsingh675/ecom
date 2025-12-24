@@ -221,8 +221,8 @@ export async function GET(request: NextRequest) {
         // Generate PDF
         const pdfBuffer = await generateInvoicePDF(invoiceData)
 
-        // Return PDF
-        return new NextResponse(pdfBuffer, {
+        // Return PDF (convert Uint8Array to Buffer for NextResponse)
+        return new NextResponse(Buffer.from(pdfBuffer), {
             headers: {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename="invoice-${invoiceData.invoiceNumber}.pdf"`,
